@@ -4,22 +4,20 @@
 void TextBuffer::read_file(const char *file_name)
 {
     lines.clear();
-    amount_rows = 0;
     std::ifstream infile(file_name);
     std::string line;
     while (std::getline(infile, line))
     {
         lines.push_back(line);
-        ++amount_rows;
     }
 }
 
 int TextBuffer::get_amount_rows() const
 {
-    return amount_rows;
+    return lines.size();
 }
 
-const std::string &TextBuffer::get_line(int row)
+const std::string &TextBuffer::get_line(int row) const
 {
     return lines.at(row);
 }
