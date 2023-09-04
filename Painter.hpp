@@ -12,6 +12,7 @@ public:
     void begin_drawing();
     void end_drawing();
     void draw_cursor(int row, int col);
+    void draw_text_buffer(const EditorSettings &settings, const TextBuffer &buf, const Cursor &cursor);
     void clear_screen();
     void hide_cursor();
     void show_cursor();

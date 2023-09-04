@@ -27,6 +27,27 @@ void Painter::draw_cursor(int row, int col)
     add_to_buf(b);
 }
 
+void Painter::draw_text_buffer(const EditorSettings &settings, const TextBuffer &buf, const Cursor &cursor)
+{
+    draw_cursor(0, 0);
+    auto it = buf.begin() + cursor.get_row_offset();
+    auto end = buf.end();
+    int visible_rows = settings.get_rows();
+    while (it != end && visible_rows)
+    {
+        // clear the row
+        add_to_buf("\x1b[K");
+        // draw the row forward from the row from the column offset
+        if (cursor.get_col_offset() < (*it).length())
+        {
+            add_to_buf((*it).substr(cursor.get_col_offset()).c_str());
+        }
+        add_to_buf("\r\n");
+        ++it;
+        --visible_rows;
+    }
+}
+
 void Painter::add_to_buf(const char *text)
 {
     buf.insert(buf.end(), text, text + strlen(text));

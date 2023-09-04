@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
     settings.update_window_size();
 
     bool running = true;
+    bool should_redraw = true;
 
     while (running)
     {
@@ -43,8 +44,13 @@ int main(int argc, char *argv[])
             case CURSOR_DOWN:
             case CURSOR_LEFT:
             case CURSOR_RIGHT:
-                cursor.update_position(c, settings, buf);
+                should_redraw = cursor.update_position(c, settings, buf) || should_redraw;
                 break;
+        }
+        if (should_redraw)
+        {
+            painter.draw_text_buffer(settings, buf, cursor);
+            should_redraw = false;
         }
         painter.draw_cursor(cursor.get_row(), cursor.get_col());
         painter.end_drawing();
