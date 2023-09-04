@@ -70,7 +70,7 @@ bool Cursor::update_row_position(int step, const EditorSettings &settings, const
 bool Cursor::update_col_position(int step, const EditorSettings &settings, const TextBuffer &buf)
 {
     int new_pos = col_pos + step; 
-    bool outside_file_buffer = new_pos + col_offset >= (int)buf.get_line(row_pos + row_offset).length();
+    bool outside_file_buffer = (buf.get_amount_rows() == 0) || (new_pos + col_offset >= (int)buf.get_line(row_pos + row_offset).length());
     // no content to move the cursor over
     if (outside_file_buffer)
     {

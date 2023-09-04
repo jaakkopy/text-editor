@@ -37,10 +37,10 @@ void Painter::draw_text_buffer(const EditorSettings &settings, const TextBuffer 
     {
         // clear the row
         add_to_buf("\x1b[K");
-        // draw the row forward from the row from the column offset
+        // draw the row forward from the column offset
         if (cursor.get_col_offset() < (*it).length())
         {
-            add_to_buf((*it).substr(cursor.get_col_offset()).c_str());
+            add_to_buf((*it).substr(cursor.get_col_offset(), settings.get_cols() - cursor.get_col_offset()).c_str());
         }
         add_to_buf("\r\n");
         ++it;

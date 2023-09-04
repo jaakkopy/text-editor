@@ -9,13 +9,14 @@
 int Input::read_byte()
 {
     int n;
-    int c = 0;
+    int c;
     while ( (n = read(STDIN_FILENO, &c, 1)) != 1 )
     {
         if (errno != EAGAIN)
         {
             CHECK(n, -1, "read");
         }
+        c = 0;
     }
     return c;
 }
