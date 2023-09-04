@@ -36,6 +36,8 @@ int Cursor::get_col_offset() const
 bool Cursor::update_row_position(int step, const EditorSettings &settings, const TextBuffer &buf)
 {
     int new_pos = row_pos + step;
+    if (new_pos + row_offset == -1)
+        return false;
     bool outside_file_buffer = new_pos + row_offset >= buf.get_amount_rows();
     // no content to move the cursor over
     if (outside_file_buffer)
@@ -70,6 +72,8 @@ bool Cursor::update_row_position(int step, const EditorSettings &settings, const
 bool Cursor::update_col_position(int step, const EditorSettings &settings, const TextBuffer &buf)
 {
     int new_pos = col_pos + step; 
+    if (new_pos + col_offset == -1)
+        return false;
     bool outside_file_buffer = (buf.get_amount_rows() == 0) || (new_pos + col_offset >= (int)buf.get_line(row_pos + row_offset).length());
     // no content to move the cursor over
     if (outside_file_buffer)

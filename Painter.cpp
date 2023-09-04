@@ -29,7 +29,7 @@ void Painter::draw_cursor(int row, int col)
 
 void Painter::draw_text_buffer(const EditorSettings &settings, const TextBuffer &buf, const Cursor &cursor)
 {
-    draw_cursor(0, 0);
+    add_to_buf("\x1b[H");
     auto it = buf.begin() + cursor.get_row_offset();
     auto end = buf.end();
     int visible_rows = settings.get_rows();
@@ -38,7 +38,7 @@ void Painter::draw_text_buffer(const EditorSettings &settings, const TextBuffer 
         // clear the row
         add_to_buf("\x1b[K");
         // draw the row forward from the column offset
-        if (cursor.get_col_offset() < (*it).length())
+        if (cursor.get_col_offset() < (int)(*it).length())
         {
             add_to_buf((*it).substr(cursor.get_col_offset(), settings.get_cols() - cursor.get_col_offset()).c_str());
         }
