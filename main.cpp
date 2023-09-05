@@ -12,7 +12,7 @@
 #include "key_definitions.hpp"
 #include "TextBuffer.hpp"
 
-void init_editor(EditorSettings &settings, Painter &painter, TextBuffer &buf, Cursor &cursor);
+void init_editor(EditorSettings &settings, Painter &painter);
 
 int main(int argc, char *argv[])
 {
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     {
         buf.read_file(argv[1]);
     }
-    init_editor(settings, painter, buf, cursor);    
+    init_editor(settings, painter);    
     settings.update_window_size();
     painter.begin_drawing();
     painter.draw_text_buffer(settings, buf, cursor);
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void init_editor(EditorSettings &settings, Painter &painter, TextBuffer &buf, Cursor &cursor)
+void init_editor(EditorSettings &settings, Painter &painter)
 {
     settings.enable_raw_mode();
     painter.begin_drawing();

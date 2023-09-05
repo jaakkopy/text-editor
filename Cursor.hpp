@@ -15,7 +15,6 @@ public:
 private:
     bool update_row_position(int step, const EditorSettings &settings, const TextBuffer &buf);
     bool update_col_position(int step, const EditorSettings &settings, const TextBuffer &buf);
-    // Note. These are 0-indexed, but the escape sequence expects 1-indexed numbers.
     int row_pos = 0;
     int col_pos = 0;
     int row_offset = 0;
