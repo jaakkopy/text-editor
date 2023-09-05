@@ -35,11 +35,14 @@ void Painter::draw_text_buffer(const EditorSettings &settings, const TextBuffer 
     int visible_rows = settings.get_rows();
     while (it != end && visible_rows)
     {
-        // draw the row forward from the column offset
-        if (cursor.get_col_offset() < (int)(*it).length())
+        int line_length = (int)(*it).length();
+        int offset_length = line_length - cursor.get_col_offset();
+        // if the remainder of the line is visible with this column offset
+        if (offset_length > 0)
         {
-            add_to_buf((*it).substr(cursor.get_col_offset(), settings.get_cols() - cursor.get_col_offset()).c_str());
+            add_to_buf((*it).substr(cursor.get_col_offset(), settings.get_cols()).c_str());
         }
+        
         if (visible_rows > 1)
             add_to_buf("\r\n");
         ++it;
