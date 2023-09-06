@@ -1,0 +1,1 @@
+A minimal text editor for the terminal (in progress)
