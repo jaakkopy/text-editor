@@ -29,5 +29,32 @@ std::_Deque_iterator<std::string, const std::string &, const std::string *> Text
 
 std::_Deque_iterator<std::string, const std::string &, const std::string *> TextBuffer::end() const
 {
-    return lines.cend(); 
+    return lines.cend();
+}
+
+void TextBuffer::write_byte(char c, int row, int col)
+{
+    while (row >= (int)lines.size())
+    {
+        lines.push_back(std::string());
+    }
+    std::string &r = lines.at(row);
+    if (col >= (int)r.length())
+    {
+        r.push_back(c);
+    }
+    else
+    {
+        r.insert(r.begin() + col, c);
+    }
+}
+
+void TextBuffer::erase_byte(int row, int col)
+{
+    if (row >= (int)lines.size())
+        return;
+    std::string &r = lines.at(row);
+    if (col >= (int)r.length())
+        return;
+    r.erase(r.begin() + col);
 }

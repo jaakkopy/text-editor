@@ -3,6 +3,7 @@
 
 enum Keys
 {
+    BACKSPACE = 127,
     CURSOR_UP = 1000,
     CURSOR_DOWN,
     CURSOR_LEFT,

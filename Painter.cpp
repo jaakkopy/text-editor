@@ -42,7 +42,7 @@ void Painter::draw_text_buffer(const EditorSettings &settings, const TextBuffer 
         {
             add_to_buf((*it).substr(cursor.get_col_offset(), settings.get_cols()).c_str());
         }
-        
+
         if (visible_rows > 1)
             add_to_buf("\r\n");
         ++it;
@@ -50,9 +50,33 @@ void Painter::draw_text_buffer(const EditorSettings &settings, const TextBuffer 
     }
 }
 
+void Painter::draw_line(const EditorSettings &settings, const TextBuffer &buf, const Cursor &cursor)
+{
+    draw_cursor(cursor.get_row(), 0);
+    add_to_buf("\x1b[K");
+    auto line = buf.get_line(cursor.get_offset_adjusted_row());
+    int line_length = (int)line.length();
+    int offset_length = line_length - cursor.get_col_offset();
+    if (offset_length > 0)
+    {
+        add_to_buf(line.substr(cursor.get_col_offset(), settings.get_cols()).c_str());
+    }
+    draw_cursor(cursor.get_row(), cursor.get_col());
+}
+
+void Painter::draw_char(int c)
+{
+    add_to_buf(c);
+}
+
 void Painter::add_to_buf(const char *text)
 {
     buf.insert(buf.end(), text, text + strlen(text));
+}
+
+void Painter::add_to_buf(char c)
+{
+    buf.push_back(c);
 }
 
 void Painter::hide_cursor()

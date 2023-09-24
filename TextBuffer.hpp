@@ -12,6 +12,8 @@ public:
     const std::string &get_line(int row) const;
     std::_Deque_iterator<std::string, const std::string &, const std::string *> begin() const; 
     std::_Deque_iterator<std::string, const std::string &, const std::string *> end() const; 
+    void write_byte(char c, int row, int col);
+    void erase_byte(int row, int col);
 private:
     std::deque<std::string> lines;
 };

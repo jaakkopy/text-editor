@@ -33,6 +33,16 @@ int Cursor::get_col_offset() const
     return col_offset;
 }
 
+int Cursor::get_offset_adjusted_row() const
+{
+    return row_pos + row_offset;
+}
+
+int Cursor::get_offset_adjusted_col() const
+{
+    return col_pos + col_offset;
+}
+
 bool Cursor::update_row_position(int step, const EditorSettings &settings, const TextBuffer &buf)
 {
     int new_pos = row_pos + step;
