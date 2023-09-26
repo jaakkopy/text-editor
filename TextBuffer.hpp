@@ -14,7 +14,9 @@ public:
     std::_Deque_iterator<std::string, const std::string &, const std::string *> end() const; 
     void write_byte(char c, int row, int col);
     void erase_byte(int row, int col);
+    void write_file();
 private:
+    std::string file_name;
     std::deque<std::string> lines;
 };
 

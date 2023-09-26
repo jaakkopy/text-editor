@@ -25,6 +25,11 @@ int main(int argc, char *argv[])
     {
         buf.read_file(argv[1]);
     }
+    else
+    {
+        fprintf(stderr, "No file given\n");
+        return 1;
+    }
     init_editor(settings, painter);
     settings.update_window_size();
     painter.begin_drawing();
@@ -46,6 +51,9 @@ int main(int argc, char *argv[])
         case CTRL_KEY('q'):
             running = false;
             break;
+        case CTRL_KEY('s'):
+            buf.write_file();
+            break;
         case CURSOR_UP:
         case CURSOR_DOWN:
         case CURSOR_LEFT:
@@ -63,14 +71,14 @@ int main(int argc, char *argv[])
             painter.draw_text_buffer(settings, buf, cursor);
             should_redraw = false;
         }
-        else if (erase_char)
+        if (erase_char)
         {
             cursor.update_position(CURSOR_LEFT, settings, buf);
             buf.erase_byte(cursor.get_offset_adjusted_row(), cursor.get_offset_adjusted_col());
             painter.draw_line(settings, buf, cursor);
             erase_char = false;
         }
-        else if (write_char)
+        if (write_char)
         {
             buf.write_byte((char)c, cursor.get_offset_adjusted_row(), cursor.get_offset_adjusted_col());
             cursor.update_position(CURSOR_RIGHT, settings, buf);

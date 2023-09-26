@@ -10,6 +10,8 @@ void TextBuffer::read_file(const char *file_name)
     {
         lines.push_back(line);
     }
+    infile.close();
+    this->file_name = std::string(file_name);
 }
 
 int TextBuffer::get_amount_rows() const
@@ -57,4 +59,13 @@ void TextBuffer::erase_byte(int row, int col)
     if (col >= (int)r.length())
         return;
     r.erase(r.begin() + col);
+}
+
+void TextBuffer::write_file()
+{
+    std::ofstream ofile(file_name);
+    for (auto line : lines) {
+        ofile << line;
+    }
+    ofile.close();
 }
