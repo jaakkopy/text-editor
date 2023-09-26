@@ -69,3 +69,28 @@ void TextBuffer::write_file()
     }
     ofile.close();
 }
+
+void TextBuffer::split_row_to_lines(int row, int col)
+{
+    lines.push_back(std::string());
+    int end = (int)lines.size() - 1;
+    if (end == 0)
+        return;
+    // Move the rows below one row down
+    for (int r = end; r > row+1; --r) {
+        lines.at(r) = lines.at(r-1);
+    }
+    // Move the right end of the split to the row below
+    std::string line = lines.at(row);
+    if (col == (int)line.length()-1)
+    {
+        lines.at(row+1).clear();
+    }
+    else
+    {
+        auto left_part = line.substr(0, (size_t)col);
+        auto right_part = lines.at(row).substr(col);
+        lines.at(row+1) = right_part;
+        lines.at(row) = left_part;
+    }
+}

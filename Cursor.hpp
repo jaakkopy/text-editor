@@ -14,6 +14,8 @@ public:
     int get_col_offset() const;
     int get_offset_adjusted_row() const;
     int get_offset_adjusted_col() const;
+    void set_row_pos(int row, const EditorSettings &settings, const TextBuffer &buf);
+    void set_col_pos(int col, const EditorSettings &settings, const TextBuffer &buf);
 private:
     bool update_row_position(int step, const EditorSettings &settings, const TextBuffer &buf);
     bool update_col_position(int step, const EditorSettings &settings, const TextBuffer &buf);

@@ -43,6 +43,28 @@ int Cursor::get_offset_adjusted_col() const
     return col_pos + col_offset;
 }
 
+void Cursor::set_row_pos(int row, const EditorSettings &settings, const TextBuffer &buf)
+{
+    int curr_row = get_offset_adjusted_row();
+    int step = (row - curr_row > 0) - (row - curr_row < 0);
+    while (curr_row != row)
+    {
+        update_row_position(step, settings, buf);
+        curr_row += step;
+    }
+}
+
+void Cursor::set_col_pos(int col, const EditorSettings &settings, const TextBuffer &buf)
+{
+    int curr_col = get_offset_adjusted_col();
+    int step = (col - curr_col > 0) - (col - curr_col < 0);
+    while (curr_col != col)
+    {
+        update_col_position(step, settings, buf);
+        curr_col += step;
+    }
+}
+
 bool Cursor::update_row_position(int step, const EditorSettings &settings, const TextBuffer &buf)
 {
     int new_pos = row_pos + step;

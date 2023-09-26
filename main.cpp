@@ -16,10 +16,6 @@ void init_editor(EditorSettings &settings, Painter &painter);
 
 int main(int argc, char *argv[])
 {
-    Input input;
-    Painter painter;
-    EditorSettings settings;
-    Cursor cursor;
     TextBuffer buf;
     if (argc > 1)
     {
@@ -30,6 +26,10 @@ int main(int argc, char *argv[])
         fprintf(stderr, "No file given\n");
         return 1;
     }
+    Input input;
+    Painter painter;
+    EditorSettings settings;
+    Cursor cursor;
     init_editor(settings, painter);
     settings.update_window_size();
     painter.begin_drawing();
@@ -80,9 +80,19 @@ int main(int argc, char *argv[])
         }
         if (write_char)
         {
-            buf.write_byte((char)c, cursor.get_offset_adjusted_row(), cursor.get_offset_adjusted_col());
-            cursor.update_position(CURSOR_RIGHT, settings, buf);
-            painter.draw_line(settings, buf, cursor);
+            if (c == '\r')
+            {
+                buf.split_row_to_lines(cursor.get_offset_adjusted_row(), cursor.get_offset_adjusted_col());
+                cursor.set_col_pos(0, settings, buf);
+                cursor.set_row_pos(cursor.get_offset_adjusted_row()+1, settings, buf);
+                painter.draw_text_buffer(settings, buf, cursor);
+            }
+            else
+            {
+                buf.write_byte((char)c, cursor.get_offset_adjusted_row(), cursor.get_offset_adjusted_col());
+                cursor.update_position(CURSOR_RIGHT, settings, buf);
+                painter.draw_line(settings, buf, cursor);
+            }
             write_char = false;
         }
         painter.draw_cursor(cursor.get_row(), cursor.get_col());
