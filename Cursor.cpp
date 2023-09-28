@@ -110,6 +110,8 @@ bool Cursor::update_col_position(int step, const EditorSettings &settings, const
     // no content to move the cursor over
     if (outside_file_buffer)
     {
+        if (abs(new_pos - col_pos) == 1)
+            col_pos = new_pos;
         return false;
     }
     int visible_cols = settings.get_cols();

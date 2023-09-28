@@ -24,12 +24,12 @@ const std::string &TextBuffer::get_line(int row) const
     return lines.at(row);
 }
 
-std::_Deque_iterator<std::string, const std::string &, const std::string *> TextBuffer::begin() const
+std::vector<std::string>::const_iterator TextBuffer::begin() const
 {
     return lines.cbegin();
 }
 
-std::_Deque_iterator<std::string, const std::string &, const std::string *> TextBuffer::end() const
+std::vector<std::string>::const_iterator TextBuffer::end() const
 {
     return lines.cend();
 }
@@ -64,8 +64,10 @@ void TextBuffer::erase_byte(int row, int col)
 void TextBuffer::write_file()
 {
     std::ofstream ofile(file_name);
-    for (auto line : lines) {
-        ofile << line;
+    for (auto it = lines.cbegin(); it != lines.cend(); ++it) {
+        if (it + 1 != lines.cend())
+            ofile << *it << '\n';
+        else ofile << *it;
     }
     ofile.close();
 }
