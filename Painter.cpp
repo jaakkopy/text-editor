@@ -27,12 +27,12 @@ void Painter::draw_cursor(int row, int col)
     add_to_buf(b);
 }
 
-void Painter::draw_text_buffer(const EditorSettings &settings, const std::shared_ptr<TextBuffer> buf, const std::shared_ptr<Position> position)
+void Painter::draw_text_buffer(const std::shared_ptr<EditorSettings> settings, const std::shared_ptr<TextBuffer> buf, const std::shared_ptr<Position> position)
 {
     clear_screen();
     auto it = buf->begin() + position->row_offset;
     auto end = buf->end();
-    int visible_rows = settings.get_visible_rows();
+    int visible_rows = settings->get_visible_rows();
     while (it != end && visible_rows)
     {
         int line_length = (int)(*it).length();
@@ -40,7 +40,7 @@ void Painter::draw_text_buffer(const EditorSettings &settings, const std::shared
         // if the remainder of the line is visible with this column offset
         if (offset_length > 0)
         {
-            add_to_buf((*it).substr(position->col_offset, settings.get_visible_columns()).c_str());
+            add_to_buf((*it).substr(position->col_offset, settings->get_visible_columns()).c_str());
         }
 
         if (visible_rows > 1)
@@ -50,7 +50,7 @@ void Painter::draw_text_buffer(const EditorSettings &settings, const std::shared
     }
 }
 
-void Painter::draw_line(const EditorSettings &settings, const std::shared_ptr<TextBuffer> buf, const std::shared_ptr<Position> position)
+void Painter::draw_line(const std::shared_ptr<EditorSettings> settings, const std::shared_ptr<TextBuffer> buf, const std::shared_ptr<Position> position)
 {
     draw_cursor(position->row_pos, 0);
     add_to_buf("\x1b[K");
@@ -59,7 +59,7 @@ void Painter::draw_line(const EditorSettings &settings, const std::shared_ptr<Te
     int offset_length = line_length - position->col_offset;
     if (offset_length > 0)
     {
-        add_to_buf(line.substr(position->col_offset, settings.get_visible_columns()).c_str());
+        add_to_buf(line.substr(position->col_offset, settings->get_visible_columns()).c_str());
     }
     draw_cursor(position->row_pos, position->col_pos);
 }

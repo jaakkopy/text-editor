@@ -6,6 +6,7 @@
 #include "EditorSettings.hpp"
 #include "Command.hpp"
 #include "InputActionType.hpp"
+#include "TextBuffer.hpp"
 
 struct Position
 {
@@ -20,10 +21,12 @@ struct Position
 class PositionUpdateCommand : public Command
 {
 public:
-    PositionUpdateCommand(std::shared_ptr<Position> position, Input action);
+    PositionUpdateCommand(std::shared_ptr<Position> position, std::shared_ptr<TextBuffer> buf, std::shared_ptr<EditorSettings> settings, Input action);
     AfterCommandInstruction execute();
 private:
-    std::shared_ptr<Position> position;
+    std::shared_ptr<Position> pos;
+    std::shared_ptr<TextBuffer> buf;
+    std::shared_ptr<EditorSettings> settings;
     Input action;
     AfterCommandInstruction update_position_left();
     AfterCommandInstruction update_position_right();

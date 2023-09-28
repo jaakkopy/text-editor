@@ -34,6 +34,9 @@ private:
     std::shared_ptr<TextBuffer> buf;
     std::shared_ptr<Position> pos;
     Input action;
+    void insert_byte();
+    void split_with_newline();
+    void erase_byte();
 };
 
 #endif

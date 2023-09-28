@@ -10,7 +10,7 @@
 class CommandBuilder
 {
 public:
-    Command *create_action_performer(std::shared_ptr<TextBuffer> buf, std::shared_ptr<Position> position, Input action);
+    Command *create_action_performer(std::shared_ptr<TextBuffer> buf, std::shared_ptr<Position> position, std::shared_ptr<EditorSettings> settings, Input action);
 };
 
 #endif

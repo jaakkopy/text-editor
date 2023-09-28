@@ -64,10 +64,12 @@ void TextBuffer::erase_byte(int row, int col)
 void TextBuffer::write_file()
 {
     std::ofstream ofile(file_name);
-    for (auto it = lines.cbegin(); it != lines.cend(); ++it) {
+    for (auto it = lines.cbegin(); it != lines.cend(); ++it)
+    {
         if (it + 1 != lines.cend())
             ofile << *it << '\n';
-        else ofile << *it;
+        else
+            ofile << *it;
     }
     ofile.close();
 }
@@ -79,20 +81,21 @@ void TextBuffer::split_row_to_lines(int row, int col)
     if (end == 0)
         return;
     // Move the rows below one row down
-    for (int r = end; r > row+1; --r) {
-        lines.at(r) = lines.at(r-1);
+    for (int r = end; r > row + 1; --r)
+    {
+        lines.at(r) = lines.at(r - 1);
     }
     // Move the right end of the split to the row below
     std::string line = lines.at(row);
-    if (col == (int)line.length()-1)
+    if (col == (int)line.length() - 1)
     {
-        lines.at(row+1).clear();
+        lines.at(row + 1).clear();
     }
     else
     {
         auto left_part = line.substr(0, (size_t)col);
         auto right_part = lines.at(row).substr(col);
-        lines.at(row+1) = right_part;
+        lines.at(row + 1) = right_part;
         lines.at(row) = left_part;
     }
 }
@@ -108,13 +111,35 @@ AfterCommandInstruction TextBufferCommand::execute()
 {
     switch (action.action_type)
     {
-        case WRITE:
-            return DRAW_LINE;
-        case ERASE:
-            return DRAW_LINE;
-        case NEWLINE:
-            return DRAW_BUF;
-        default:
-            return PASS;
+    case WRITE:
+        insert_byte();
+        return DRAW_LINE;
+    case ERASE:
+        erase_byte();
+        return DRAW_LINE;
+    case NEWLINE:
+        split_with_newline();
+        return DRAW_BUF;
+    default:
+        return PASS;
     }
+}
+
+void TextBufferCommand::insert_byte()
+{
+    buf->write_byte((char)action.b, pos->get_offset_adjusted_row(), pos->get_offset_adjusted_col());
+    // TODO: update position
+}
+
+void TextBufferCommand::split_with_newline()
+{
+    buf->split_row_to_lines(pos->get_offset_adjusted_row(), pos->get_offset_adjusted_col());
+    // TODO: update position
+}
+
+void TextBufferCommand::erase_byte()
+{
+    //pos->col_pos -= 1;
+    buf->erase_byte(pos->get_offset_adjusted_row(), pos->get_offset_adjusted_col());
+    // TODO: update position
 }

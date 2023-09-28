@@ -13,8 +13,8 @@ public:
     void begin_drawing();
     void end_drawing();
     void draw_cursor(int row, int col);
-    void draw_text_buffer(const EditorSettings &settings, const std::shared_ptr<TextBuffer> buf, const std::shared_ptr<Position> position);
-    void draw_line(const EditorSettings &settings, const std::shared_ptr<TextBuffer> buf, const std::shared_ptr<Position> position);
+    void draw_text_buffer(const std::shared_ptr<EditorSettings> settings, const std::shared_ptr<TextBuffer> buf, const std::shared_ptr<Position> position);
+    void draw_line(const std::shared_ptr<EditorSettings> settings, const std::shared_ptr<TextBuffer> buf, const std::shared_ptr<Position> position);
     void clear_screen();
     void hide_cursor();
     void show_cursor();
