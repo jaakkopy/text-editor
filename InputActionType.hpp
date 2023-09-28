@@ -3,12 +3,21 @@
 
 enum InputActionType
 {
-    WRITE = 1000,
+    WRITE,
     ERASE,
+    NEWLINE,
     POSITION_UP,
     POSITION_DOWN,
     POSITION_LEFT,
-    POSITION_RIGHT
+    POSITION_RIGHT,
+    QUIT,
+    SAVE
+};
+
+struct Input
+{
+    InputActionType action_type;
+    char b;
 };
 
 #endif

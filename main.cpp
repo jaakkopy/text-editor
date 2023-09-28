@@ -4,12 +4,12 @@
 #include <cstdio>
 #include <ctype.h>
 #include <errno.h>
+#include <memory>
 
 #include "EditorSettings.hpp"
 #include "Painter.hpp"
 #include "InputReader.hpp"
 #include "Position.hpp"
-#include "macros.hpp"
 #include "TextBuffer.hpp"
 #include "CommandBuilder.hpp"
 
@@ -17,10 +17,10 @@ void init_editor(EditorSettings &settings, Painter &painter);
 
 int main(int argc, char *argv[])
 {
-    TextBuffer buf;
+    std::shared_ptr<TextBuffer> buf = std::make_shared<TextBuffer>(TextBuffer());
     if (argc > 1)
     {
-        buf.read_file(argv[1]);
+        buf->read_file(argv[1]);
     }
     else
     {
@@ -31,24 +31,21 @@ int main(int argc, char *argv[])
     CommandBuilder command_builder;
     Painter painter;
     EditorSettings settings;
-    Position cursor;
+    std::shared_ptr<Position> position = std::make_shared<Position>(Position());
     init_editor(settings, painter);
     settings.update_window_size();
-    painter.begin_drawing();
-    painter.draw_text_buffer(settings, buf, cursor);
-    painter.draw_cursor(0, 0);
-    painter.end_drawing();
+    //painter.begin_drawing();
+    //painter.draw_text_buffer(settings, buf, position);
+    //painter.draw_cursor(0, 0);
+    //painter.end_drawing();
 
     bool running = true;
-    bool should_redraw = false;
-    bool write_char = false;
-    bool erase_char = false;
-
     while (running)
     {
         Input action = input.read_input();
-        Command cmd = command_builder.create_action_performer(action);
-        running = cmd.execute();
+        Command *cmd = command_builder.create_action_performer(buf, position, action);
+        running = cmd->execute();
+        delete cmd;
         
         /*
         painter.begin_drawing();

@@ -1,9 +1,13 @@
 #include <unistd.h>
 #include <termios.h>
 #include <sys/ioctl.h>
+#include <errno.h>
+#include <cstdlib>
+#include <cstdio>
 
 #include "EditorSettings.hpp"
-#include "macros.hpp"
+
+#define CHECK(rv, error_code, msg) if (rv == error_code) {perror(msg); exit(1);}
 
 struct termios EditorSettings::original_terminal_settings;
 

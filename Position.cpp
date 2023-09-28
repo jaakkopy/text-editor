@@ -1,5 +1,6 @@
 #include "Position.hpp"
 
+/*
 bool Position::update_position(int user_input, const EditorSettings &settings, const TextBuffer &buf)
 {
     switch (user_input)
@@ -137,25 +138,32 @@ bool Position::update_col_position(int step, const EditorSettings &settings, con
     }
     return false;
 }
+*/
 
-PositionUpdateCommand::PositionUpdateCommand(Position *position, InputActionType action_type)
+PositionUpdateCommand::PositionUpdateCommand(std::shared_ptr<Position> position, Input action)
 {
     this->position = position;
-    this->action_type = action_type;
+    this->action = action;
 }
 
 bool PositionUpdateCommand::execute()
 {
-    switch (action_type)
+    switch (action.action_type)
     {
         case POSITION_UP:
             update_position_up();
+            break;
         case POSITION_DOWN:
             update_position_down();
+            break;
         case POSITION_LEFT:
             update_position_left();
+            break;
         case POSITION_RIGHT:
             update_position_right();
+            break;
+        default:
+            break;
     }
     return true;
 }

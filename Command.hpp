@@ -3,7 +3,9 @@
 
 class Command
 {
+public:
     virtual bool execute() = 0;
+    virtual ~Command() {}
 };
 
 #endif

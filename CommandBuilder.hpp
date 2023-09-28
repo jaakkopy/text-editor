@@ -3,10 +3,14 @@
 
 #include "InputReader.hpp"
 #include "Command.hpp"
+#include "TextBuffer.hpp"
+#include "Position.hpp"
+#include <memory>
 
 class CommandBuilder
 {
-    Command create_action_performer(Input action);
+public:
+    Command *create_action_performer(std::shared_ptr<TextBuffer> buf, std::shared_ptr<Position> position, Input action);
 };
 
 #endif

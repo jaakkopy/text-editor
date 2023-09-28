@@ -96,3 +96,26 @@ void TextBuffer::split_row_to_lines(int row, int col)
         lines.at(row) = left_part;
     }
 }
+
+TextBufferCommand::TextBufferCommand(std::shared_ptr<TextBuffer> buf, std::shared_ptr<Position> pos, Input action)
+{
+    this->buf = buf;
+    this->pos = pos;
+    this->action = action;
+}
+
+bool TextBufferCommand::execute()
+{
+    switch (action.action_type)
+    {
+        case WRITE:
+            break;
+        case ERASE:
+            break;
+        case NEWLINE:
+            break;
+        default:
+            break;
+    }
+    return true;
+}

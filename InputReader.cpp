@@ -1,8 +1,10 @@
 #include <errno.h>
 #include <cstdlib>
+#include <cstdio>
 #include <unistd.h>
 #include "InputReader.hpp"
-#include "macros.hpp"
+
+#define CTRL_KEY(key) (key & 0b00011111)
 
 Input InputReader::read_input()
 {
@@ -13,19 +15,28 @@ Input InputReader::read_input()
     switch (inp.b)
     {
         case 'A': 
-            inp.action_type = CURSOR_UP;
+            inp.action_type = POSITION_UP;
             break;
         case 'B': 
-            inp.action_type = CURSOR_DOWN;
+            inp.action_type = POSITION_DOWN;
             break;
         case 'C': 
-            inp.action_type = CURSOR_RIGHT;
+            inp.action_type = POSITION_RIGHT;
             break;
         case 'D': 
-            inp.action_type = CURSOR_LEFT;
+            inp.action_type = POSITION_LEFT;
             break;
         case BACKSPACE:
             inp.action_type = ERASE;
+            break;
+        case '\r':
+            inp.action_type = NEWLINE;
+            break;
+        case CTRL_KEY('q'):
+            inp.action_type = QUIT;
+            break;
+        case CTRL_KEY('s'):
+            inp.action_type = SAVE;
             break;
         default:
             inp.action_type = WRITE;
@@ -41,7 +52,11 @@ int InputReader::read_byte()
     {
         if (errno != EAGAIN)
         {
-            CHECK(n, -1, "read");
+            if (n == -1)
+            {
+                perror("read"); 
+                exit(1);
+            }
         }
         c = 0;
     }

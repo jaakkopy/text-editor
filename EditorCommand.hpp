@@ -1,0 +1,18 @@
+#ifndef EDITOR_COMMANDS_HPP
+#define EDITOR_COMMANDS_HPP
+
+#include <memory>
+#include "Command.hpp"
+#include "TextBuffer.hpp"
+
+class EditorCommand : public Command
+{
+public:
+    EditorCommand(std::shared_ptr<TextBuffer> buf, Input action);
+    bool execute();
+private:
+    Input action;
+    std::shared_ptr<TextBuffer> buf;
+};
+
+#endif

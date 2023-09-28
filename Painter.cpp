@@ -27,20 +27,20 @@ void Painter::draw_cursor(int row, int col)
     add_to_buf(b);
 }
 
-void Painter::draw_text_buffer(const EditorSettings &settings, const TextBuffer &buf, const Position &cursor)
+void Painter::draw_text_buffer(const EditorSettings &settings, const TextBuffer &buf, const Position &position)
 {
     clear_screen();
-    auto it = buf.begin() + cursor.get_row_offset();
+    auto it = buf.begin() + position.row_offset;
     auto end = buf.end();
     int visible_rows = settings.get_visible_rows();
     while (it != end && visible_rows)
     {
         int line_length = (int)(*it).length();
-        int offset_length = line_length - cursor.get_col_offset();
+        int offset_length = line_length - position.col_offset;
         // if the remainder of the line is visible with this column offset
         if (offset_length > 0)
         {
-            add_to_buf((*it).substr(cursor.get_col_offset(), settings.get_visible_columns()).c_str());
+            add_to_buf((*it).substr(position.col_offset, settings.get_visible_columns()).c_str());
         }
 
         if (visible_rows > 1)
@@ -50,18 +50,18 @@ void Painter::draw_text_buffer(const EditorSettings &settings, const TextBuffer 
     }
 }
 
-void Painter::draw_line(const EditorSettings &settings, const TextBuffer &buf, const Position &cursor)
+void Painter::draw_line(const EditorSettings &settings, const TextBuffer &buf, const Position &position)
 {
-    draw_cursor(cursor.get_row(), 0);
+    draw_cursor(position.row_pos, 0);
     add_to_buf("\x1b[K");
-    auto line = buf.get_line(cursor.get_offset_adjusted_row());
+    auto line = buf.get_line(position.get_offset_adjusted_row());
     int line_length = (int)line.length();
-    int offset_length = line_length - cursor.get_col_offset();
+    int offset_length = line_length - position.col_offset;
     if (offset_length > 0)
     {
-        add_to_buf(line.substr(cursor.get_col_offset(), settings.get_visible_columns()).c_str());
+        add_to_buf(line.substr(position.col_offset, settings.get_visible_columns()).c_str());
     }
-    draw_cursor(cursor.get_row(), cursor.get_col());
+    draw_cursor(position.row_pos, position.col_pos);
 }
 
 void Painter::draw_char(int c)

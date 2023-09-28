@@ -1,40 +1,30 @@
 #ifndef CURSOR_HPP
 #define CURSOR_HPP
 
+#include <memory>
+
 #include "EditorSettings.hpp"
-#include "TextBuffer.hpp"
 #include "Command.hpp"
 #include "InputActionType.hpp"
 
-class Position
+struct Position
 {
-public:
-    bool update_position(int user_input, const EditorSettings &settings, const TextBuffer &buf);
-    int get_row() const;
-    int get_col() const;
-    int get_row_offset() const;
-    int get_col_offset() const;
-    int get_offset_adjusted_row() const;
-    int get_offset_adjusted_col() const;
-    void set_row_pos(int row, const EditorSettings &settings, const TextBuffer &buf);
-    void set_col_pos(int col, const EditorSettings &settings, const TextBuffer &buf);
-private:
-    bool update_row_position(int step, const EditorSettings &settings, const TextBuffer &buf);
-    bool update_col_position(int step, const EditorSettings &settings, const TextBuffer &buf);
     int row_pos = 0;
     int col_pos = 0;
     int row_offset = 0;
     int col_offset = 0;
+    int get_offset_adjusted_row() const {return row_pos + row_offset;}
+    int get_offset_adjusted_col() const {return col_pos + col_offset;}
 };
 
-class PositionUpdateCommand : Command
+class PositionUpdateCommand : public Command
 {
 public:
-    PositionUpdateCommand(Position *position, InputActionType action_type);
-    virtual bool execute();
+    PositionUpdateCommand(std::shared_ptr<Position> position, Input action);
+    bool execute();
 private:
-    Position *position;
-    InputActionType action_type;
+    std::shared_ptr<Position> position;
+    Input action;
     void update_position_left();
     void update_position_right();
     void update_position_up();

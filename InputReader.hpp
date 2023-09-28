@@ -5,13 +5,6 @@
 
 #include "InputActionType.hpp"
 
-
-struct Input
-{
-    InputActionType action_type;
-    char b;
-};
-
 class InputReader
 {
 public:

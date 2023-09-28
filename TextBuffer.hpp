@@ -3,6 +3,10 @@
 
 #include <vector>
 #include <string>
+#include <memory>
+#include "Command.hpp"
+#include "InputActionType.hpp"
+#include "Position.hpp"
 
 class TextBuffer
 {
@@ -19,6 +23,17 @@ public:
 private:
     std::string file_name;
     std::vector<std::string> lines;
+};
+
+class TextBufferCommand : public Command
+{
+public:
+    TextBufferCommand(std::shared_ptr<TextBuffer> buf, std::shared_ptr<Position> pos, Input action);
+    bool execute();
+private:
+    std::shared_ptr<TextBuffer> buf;
+    std::shared_ptr<Position> pos;
+    Input action;
 };
 
 #endif
