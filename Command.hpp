@@ -1,10 +1,18 @@
 #ifndef COMMAND_HPP
 #define COMMAND_HPP
 
+enum AfterCommandInstruction
+{
+    PASS,
+    DRAW_LINE,
+    DRAW_BUF,
+    STOP
+};
+
 class Command
 {
 public:
-    virtual bool execute() = 0;
+    virtual AfterCommandInstruction execute() = 0;
     virtual ~Command() {}
 };
 

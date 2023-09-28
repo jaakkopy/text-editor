@@ -34,17 +34,30 @@ int main(int argc, char *argv[])
     std::shared_ptr<Position> position = std::make_shared<Position>(Position());
     init_editor(settings, painter);
     settings.update_window_size();
-    //painter.begin_drawing();
-    //painter.draw_text_buffer(settings, buf, position);
-    //painter.draw_cursor(0, 0);
-    //painter.end_drawing();
+    painter.begin_drawing();
+    painter.draw_text_buffer(settings, buf, position);
+    painter.draw_cursor(0, 0);
+    painter.end_drawing();
 
     bool running = true;
     while (running)
     {
         Input action = input.read_input();
         Command *cmd = command_builder.create_action_performer(buf, position, action);
-        running = cmd->execute();
+        switch (cmd->execute())
+        {
+            case STOP:
+                running = false;
+                break;
+            case DRAW_LINE:
+                painter.draw_line(settings, buf, position);
+                break;
+            case DRAW_BUF:
+                painter.draw_text_buffer(settings, buf, position);
+                break;
+            case PASS:
+                break;
+        }
         delete cmd;
         
         /*

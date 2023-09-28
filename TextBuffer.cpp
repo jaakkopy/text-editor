@@ -104,18 +104,17 @@ TextBufferCommand::TextBufferCommand(std::shared_ptr<TextBuffer> buf, std::share
     this->action = action;
 }
 
-bool TextBufferCommand::execute()
+AfterCommandInstruction TextBufferCommand::execute()
 {
     switch (action.action_type)
     {
         case WRITE:
-            break;
+            return DRAW_LINE;
         case ERASE:
-            break;
+            return DRAW_LINE;
         case NEWLINE:
-            break;
+            return DRAW_BUF;
         default:
-            break;
+            return PASS;
     }
-    return true;
 }

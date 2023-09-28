@@ -6,16 +6,16 @@ EditorCommand::EditorCommand(std::shared_ptr<TextBuffer> buf, Input action)
     this->action = action;
 }
 
-bool EditorCommand::execute()
+AfterCommandInstruction EditorCommand::execute()
 {
     switch (action.action_type)
     {
         case SAVE:
             buf->write_file();
-            return true;
+            return PASS;
         case QUIT:
-            return false;
+            return STOP;
         default:
-            return true;
+            return PASS;
     }
 }

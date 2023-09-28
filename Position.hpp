@@ -21,14 +21,14 @@ class PositionUpdateCommand : public Command
 {
 public:
     PositionUpdateCommand(std::shared_ptr<Position> position, Input action);
-    bool execute();
+    AfterCommandInstruction execute();
 private:
     std::shared_ptr<Position> position;
     Input action;
-    void update_position_left();
-    void update_position_right();
-    void update_position_up();
-    void update_position_down();
+    AfterCommandInstruction update_position_left();
+    AfterCommandInstruction update_position_right();
+    AfterCommandInstruction update_position_up();
+    AfterCommandInstruction update_position_down();
 };
 
 #endif

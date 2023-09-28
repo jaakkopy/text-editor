@@ -29,7 +29,7 @@ class TextBufferCommand : public Command
 {
 public:
     TextBufferCommand(std::shared_ptr<TextBuffer> buf, std::shared_ptr<Position> pos, Input action);
-    bool execute();
+    AfterCommandInstruction execute();
 private:
     std::shared_ptr<TextBuffer> buf;
     std::shared_ptr<Position> pos;

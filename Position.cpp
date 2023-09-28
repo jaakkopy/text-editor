@@ -1,18 +1,6 @@
 #include "Position.hpp"
 
 /*
-bool Position::update_position(int user_input, const EditorSettings &settings, const TextBuffer &buf)
-{
-    switch (user_input)
-    {
-        case CURSOR_UP:    return update_row_position(-1, settings, buf);
-        case CURSOR_DOWN:  return update_row_position(1, settings, buf);
-        case CURSOR_LEFT:  return update_col_position(-1, settings, buf);
-        case CURSOR_RIGHT: return update_col_position(1, settings, buf);
-    }
-    return false;
-}
-
 int Position::get_row() const
 {
     return row_pos;
@@ -146,40 +134,35 @@ PositionUpdateCommand::PositionUpdateCommand(std::shared_ptr<Position> position,
     this->action = action;
 }
 
-bool PositionUpdateCommand::execute()
+AfterCommandInstruction PositionUpdateCommand::execute()
 {
     switch (action.action_type)
     {
         case POSITION_UP:
-            update_position_up();
-            break;
+            return update_position_up();
         case POSITION_DOWN:
-            update_position_down();
-            break;
+            return update_position_down();
         case POSITION_LEFT:
-            update_position_left();
-            break;
+            return update_position_left();
         case POSITION_RIGHT:
-            update_position_right();
-            break;
+            return update_position_right();
         default:
-            break;
+            return PASS;
     }
-    return true;
 }
 
-void PositionUpdateCommand::update_position_left()
+AfterCommandInstruction PositionUpdateCommand::update_position_left()
 {
 }
 
-void PositionUpdateCommand::update_position_right()
+AfterCommandInstruction PositionUpdateCommand::update_position_right()
 {
 }
 
-void PositionUpdateCommand::update_position_up()
+AfterCommandInstruction PositionUpdateCommand::update_position_up()
 {
 }
 
-void PositionUpdateCommand::update_position_down()
+AfterCommandInstruction PositionUpdateCommand::update_position_down()
 {
 }

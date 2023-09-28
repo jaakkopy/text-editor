@@ -9,7 +9,7 @@ class EditorCommand : public Command
 {
 public:
     EditorCommand(std::shared_ptr<TextBuffer> buf, Input action);
-    bool execute();
+    AfterCommandInstruction execute();
 private:
     Input action;
     std::shared_ptr<TextBuffer> buf;
