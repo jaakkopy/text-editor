@@ -3,8 +3,10 @@
 
 #include "EditorSettings.hpp"
 #include "TextBuffer.hpp"
+#include "Command.hpp"
+#include "InputActionType.hpp"
 
-class Cursor
+class Position
 {
 public:
     bool update_position(int user_input, const EditorSettings &settings, const TextBuffer &buf);
@@ -23,6 +25,20 @@ private:
     int col_pos = 0;
     int row_offset = 0;
     int col_offset = 0;
+};
+
+class PositionUpdateCommand : Command
+{
+public:
+    PositionUpdateCommand(Position *position, InputActionType action_type);
+    virtual bool execute();
+private:
+    Position *position;
+    InputActionType action_type;
+    void update_position_left();
+    void update_position_right();
+    void update_position_up();
+    void update_position_down();
 };
 
 #endif

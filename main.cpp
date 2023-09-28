@@ -4,13 +4,14 @@
 #include <cstdio>
 #include <ctype.h>
 #include <errno.h>
+
 #include "EditorSettings.hpp"
 #include "Painter.hpp"
-#include "Input.hpp"
-#include "Cursor.hpp"
+#include "InputReader.hpp"
+#include "Position.hpp"
 #include "macros.hpp"
-#include "key_definitions.hpp"
 #include "TextBuffer.hpp"
+#include "CommandBuilder.hpp"
 
 void init_editor(EditorSettings &settings, Painter &painter);
 
@@ -26,10 +27,11 @@ int main(int argc, char *argv[])
         fprintf(stderr, "No file given\n");
         return 1;
     }
-    Input input;
+    InputReader input;
+    CommandBuilder command_builder;
     Painter painter;
     EditorSettings settings;
-    Cursor cursor;
+    Position cursor;
     init_editor(settings, painter);
     settings.update_window_size();
     painter.begin_drawing();
@@ -44,7 +46,11 @@ int main(int argc, char *argv[])
 
     while (running)
     {
-        int c = input.read_input();
+        Input action = input.read_input();
+        Command cmd = command_builder.create_action_performer(action);
+        running = cmd.execute();
+        
+        /*
         painter.begin_drawing();
         switch (c)
         {
@@ -97,6 +103,7 @@ int main(int argc, char *argv[])
         }
         painter.draw_cursor(cursor.get_row(), cursor.get_col());
         painter.end_drawing();
+        */
     }
 
     painter.begin_drawing();

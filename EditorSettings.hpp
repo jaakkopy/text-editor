@@ -9,8 +9,8 @@ public:
     static void enable_raw_mode();
     static void disable_raw_mode();
     void update_window_size();
-    int get_cols() const;
-    int get_rows() const;
+    int get_visible_columns() const;
+    int get_visible_rows() const;
 private:
     static struct termios original_terminal_settings;
     int rows;

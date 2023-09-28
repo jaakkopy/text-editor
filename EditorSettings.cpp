@@ -35,12 +35,12 @@ void EditorSettings::update_window_size()
     cols = ws.ws_col;
 }
 
-int EditorSettings::get_rows() const
+int EditorSettings::get_visible_rows() const
 {
     return rows;
 }
 
-int EditorSettings::get_cols() const
+int EditorSettings::get_visible_columns() const
 {
     return cols;
 }

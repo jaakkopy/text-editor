@@ -1,7 +1,6 @@
-#include "Cursor.hpp"
-#include "key_definitions.hpp"
+#include "Position.hpp"
 
-bool Cursor::update_position(int user_input, const EditorSettings &settings, const TextBuffer &buf)
+bool Position::update_position(int user_input, const EditorSettings &settings, const TextBuffer &buf)
 {
     switch (user_input)
     {
@@ -13,37 +12,37 @@ bool Cursor::update_position(int user_input, const EditorSettings &settings, con
     return false;
 }
 
-int Cursor::get_row() const
+int Position::get_row() const
 {
     return row_pos;
 }
 
-int Cursor::get_col() const
+int Position::get_col() const
 {
     return col_pos;
 }
 
-int Cursor::get_row_offset() const
+int Position::get_row_offset() const
 {
     return row_offset;
 }
 
-int Cursor::get_col_offset() const
+int Position::get_col_offset() const
 {
     return col_offset;
 }
 
-int Cursor::get_offset_adjusted_row() const
+int Position::get_offset_adjusted_row() const
 {
     return row_pos + row_offset;
 }
 
-int Cursor::get_offset_adjusted_col() const
+int Position::get_offset_adjusted_col() const
 {
     return col_pos + col_offset;
 }
 
-void Cursor::set_row_pos(int row, const EditorSettings &settings, const TextBuffer &buf)
+void Position::set_row_pos(int row, const EditorSettings &settings, const TextBuffer &buf)
 {
     int curr_row = get_offset_adjusted_row();
     int step = (row - curr_row > 0) - (row - curr_row < 0);
@@ -54,7 +53,7 @@ void Cursor::set_row_pos(int row, const EditorSettings &settings, const TextBuff
     }
 }
 
-void Cursor::set_col_pos(int col, const EditorSettings &settings, const TextBuffer &buf)
+void Position::set_col_pos(int col, const EditorSettings &settings, const TextBuffer &buf)
 {
     int curr_col = get_offset_adjusted_col();
     int step = (col - curr_col > 0) - (col - curr_col < 0);
@@ -65,7 +64,7 @@ void Cursor::set_col_pos(int col, const EditorSettings &settings, const TextBuff
     }
 }
 
-bool Cursor::update_row_position(int step, const EditorSettings &settings, const TextBuffer &buf)
+bool Position::update_row_position(int step, const EditorSettings &settings, const TextBuffer &buf)
 {
     int new_pos = row_pos + step;
     if (new_pos + row_offset == -1)
@@ -76,7 +75,7 @@ bool Cursor::update_row_position(int step, const EditorSettings &settings, const
     {
         return false;
     }
-    int visible_rows = settings.get_rows();
+    int visible_rows = settings.get_visible_rows();
     // if the new position is within the terminal window's view
     if (new_pos < visible_rows && new_pos >= 0)
     {
@@ -101,7 +100,7 @@ bool Cursor::update_row_position(int step, const EditorSettings &settings, const
     return false;
 }
 
-bool Cursor::update_col_position(int step, const EditorSettings &settings, const TextBuffer &buf)
+bool Position::update_col_position(int step, const EditorSettings &settings, const TextBuffer &buf)
 {
     int new_pos = col_pos + step; 
     if (new_pos + col_offset == -1)
@@ -114,7 +113,7 @@ bool Cursor::update_col_position(int step, const EditorSettings &settings, const
             col_pos = new_pos;
         return false;
     }
-    int visible_cols = settings.get_cols();
+    int visible_cols = settings.get_visible_columns();
     // if the new position is within the terminal window's view
     if (new_pos < visible_cols && new_pos >= 0)
     {
@@ -137,4 +136,42 @@ bool Cursor::update_col_position(int step, const EditorSettings &settings, const
         return true;
     }
     return false;
+}
+
+PositionUpdateCommand::PositionUpdateCommand(Position *position, InputActionType action_type)
+{
+    this->position = position;
+    this->action_type = action_type;
+}
+
+bool PositionUpdateCommand::execute()
+{
+    switch (action_type)
+    {
+        case POSITION_UP:
+            update_position_up();
+        case POSITION_DOWN:
+            update_position_down();
+        case POSITION_LEFT:
+            update_position_left();
+        case POSITION_RIGHT:
+            update_position_right();
+    }
+    return true;
+}
+
+void PositionUpdateCommand::update_position_left()
+{
+}
+
+void PositionUpdateCommand::update_position_right()
+{
+}
+
+void PositionUpdateCommand::update_position_up()
+{
+}
+
+void PositionUpdateCommand::update_position_down()
+{
 }
