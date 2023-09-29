@@ -9,11 +9,11 @@
 
 struct EditorState
 {
-    EditorState(std::shared_ptr<Position> position, std::shared_ptr<TextBuffer> buf, std::shared_ptr<EditorSettings> settings)
+    EditorState()
     {
-        this->position = position;
-        this->buffer = buf;
-        this->settings = settings;
+        this->position = std::make_shared<Position>();
+        this->buffer = std::make_shared<TextBuffer>();
+        this->settings = std::make_shared<EditorSettings>();
     }
     std::shared_ptr<TextBuffer> buffer;
     std::shared_ptr<Position> position;

@@ -16,10 +16,10 @@
 
 int main(int argc, char *argv[])
 {
-    std::shared_ptr<TextBuffer> buf = std::make_shared<TextBuffer>(TextBuffer());
+    std::shared_ptr<struct EditorState> state = std::make_shared<EditorState>();
     if (argc > 1)
     {
-        buf->read_file(argv[1]);
+        state->buffer->read_file(argv[1]);
     }
     else
     {
@@ -29,20 +29,16 @@ int main(int argc, char *argv[])
     InputReader input;
     CommandBuilder command_builder;
     Painter painter;
-    std::shared_ptr<EditorSettings> settings = std::make_shared<EditorSettings>(EditorSettings());
-    std::shared_ptr<Position> position = std::make_shared<Position>(Position());
-
-    std::shared_ptr<struct EditorState> state = std::make_shared<EditorState>(EditorState(position, buf, settings));
     
-    settings->enable_raw_mode();
+    state->settings->enable_raw_mode();
     painter.begin_drawing();
     painter.clear_screen();
-    painter.draw_cursor(0, 0);
+    painter.draw_cursor(state->position);
     painter.end_drawing();
-    settings->update_window_size();
+    state->settings->update_window_size();
     painter.begin_drawing();
-    painter.draw_text_buffer(settings, buf, position);
-    painter.draw_cursor(0, 0);
+    painter.draw_text_buffer(state);
+    painter.draw_cursor(state->position);
     painter.end_drawing();
 
     bool running = true;
@@ -57,16 +53,16 @@ int main(int argc, char *argv[])
                 running = false;
                 break;
             case DRAW_LINE:
-                painter.draw_line(settings, buf, position);
+                painter.draw_line(state);
                 break;
             case DRAW_BUF:
-                painter.draw_text_buffer(settings, buf, position);
+                painter.draw_text_buffer(state);
                 break;
             case PASS:
                 break;
         }
         delete cmd;
-        painter.draw_cursor(position->row_pos, position->col_pos);
+        painter.draw_cursor(state->position);
         painter.end_drawing();
     }
 

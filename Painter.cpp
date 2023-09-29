@@ -20,27 +20,27 @@ void Painter::clear_screen()
     add_to_buf("\x1b[H");
 }
 
-void Painter::draw_cursor(int row, int col)
+void Painter::draw_cursor(const std::shared_ptr<Position> position)
 {
     char b[32];
-    snprintf(b, sizeof(b), "\x1b[%d;%dH", row + 1, col + 1);
+    snprintf(b, sizeof(b), "\x1b[%d;%dH", position->row_pos + 1, position->col_pos + 1);
     add_to_buf(b);
 }
 
-void Painter::draw_text_buffer(const std::shared_ptr<EditorSettings> settings, const std::shared_ptr<TextBuffer> buf, const std::shared_ptr<Position> position)
+void Painter::draw_text_buffer(const std::shared_ptr<EditorState> state)
 {
     clear_screen();
-    auto it = buf->begin() + position->row_offset;
-    auto end = buf->end();
-    int visible_rows = settings->get_visible_rows();
+    auto it = state->buffer->begin() + state->position->row_offset;
+    auto end = state->buffer->end();
+    int visible_rows = state->settings->get_visible_rows();
     while (it != end && visible_rows)
     {
         int line_length = (int)(*it).length();
-        int offset_length = line_length - position->col_offset;
+        int offset_length = line_length - state->position->col_offset;
         // if the remainder of the line is visible with this column offset
         if (offset_length > 0)
         {
-            add_to_buf((*it).substr(position->col_offset, settings->get_visible_columns()).c_str());
+            add_to_buf((*it).substr(state->position->col_offset, state->settings->get_visible_columns()).c_str());
         }
 
         if (visible_rows > 1)
@@ -50,18 +50,18 @@ void Painter::draw_text_buffer(const std::shared_ptr<EditorSettings> settings, c
     }
 }
 
-void Painter::draw_line(const std::shared_ptr<EditorSettings> settings, const std::shared_ptr<TextBuffer> buf, const std::shared_ptr<Position> position)
+void Painter::draw_line(const std::shared_ptr<EditorState> state)
 {
-    draw_cursor(position->row_pos, 0);
+    draw_cursor(state->position);
     add_to_buf("\x1b[K");
-    auto line = buf->get_line(position->get_offset_adjusted_row());
+    auto line = state->buffer->get_line(state->position->get_offset_adjusted_row());
     int line_length = (int)line.length();
-    int offset_length = line_length - position->col_offset;
+    int offset_length = line_length - state->position->col_offset;
     if (offset_length > 0)
     {
-        add_to_buf(line.substr(position->col_offset, settings->get_visible_columns()).c_str());
+        add_to_buf(line.substr(state->position->col_offset, state->settings->get_visible_columns()).c_str());
     }
-    draw_cursor(position->row_pos, position->col_pos);
+    draw_cursor(state->position);
 }
 
 void Painter::draw_char(int c)
