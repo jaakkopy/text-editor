@@ -4,17 +4,15 @@
 #include <memory>
 #include "Command.hpp"
 #include "InputActionType.hpp"
-#include "Position.hpp"
-#include "TextBuffer.hpp"
+#include "EditorState.hpp"
 
 class TextBufferCommand : public Command
 {
 public:
-    TextBufferCommand(std::shared_ptr<TextBuffer> buf, std::shared_ptr<Position> pos, Input action);
+    TextBufferCommand(std::shared_ptr<EditorState> state, Input action);
     AfterCommandInstruction execute();
 private:
-    std::shared_ptr<TextBuffer> buf;
-    std::shared_ptr<Position> pos;
+    std::shared_ptr<EditorState> state;
     Input action;
     void insert_byte();
     void split_with_newline();

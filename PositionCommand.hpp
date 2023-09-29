@@ -3,21 +3,17 @@
 
 #include <memory>
 
-#include "EditorSettings.hpp"
 #include "Command.hpp"
 #include "InputActionType.hpp"
-#include "TextBuffer.hpp"
-#include "Position.hpp"
+#include "EditorState.hpp"
 
 class PositionCommand : public Command
 {
 public:
-    PositionCommand(std::shared_ptr<Position> position, std::shared_ptr<TextBuffer> buf, std::shared_ptr<EditorSettings> settings, Input action);
+    PositionCommand(std::shared_ptr<EditorState> state, Input action);
     AfterCommandInstruction execute();
 private:
-    std::shared_ptr<Position> pos;
-    std::shared_ptr<TextBuffer> buf;
-    std::shared_ptr<EditorSettings> settings;
+    std::shared_ptr<EditorState> state;
     Input action;
     AfterCommandInstruction update_position_left();
     AfterCommandInstruction update_position_right();

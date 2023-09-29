@@ -1,8 +1,8 @@
 #include "EditorCommand.hpp"
 
-EditorCommand::EditorCommand(std::shared_ptr<TextBuffer> buf, Input action)
+EditorCommand::EditorCommand(std::shared_ptr<EditorState> state, Input action)
 {
-    this->buf = buf;
+    this->state = state;
     this->action = action;
 }
 
@@ -11,7 +11,7 @@ AfterCommandInstruction EditorCommand::execute()
     switch (action.action_type)
     {
         case SAVE:
-            buf->write_file();
+            state->buffer->write_file();
             return PASS;
         case QUIT:
             return STOP;

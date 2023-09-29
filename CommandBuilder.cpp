@@ -3,7 +3,7 @@
 #include "PositionCommand.hpp"
 #include "TextBufferCommand.hpp"
 
-Command *CommandBuilder::create_action_performer(std::shared_ptr<TextBuffer> buf, std::shared_ptr<Position> position, std::shared_ptr<EditorSettings> settings, Input action)
+Command *CommandBuilder::create_action_performer(std::shared_ptr<EditorState> state, Input action)
 {
     switch (action.action_type)
     {
@@ -11,14 +11,14 @@ Command *CommandBuilder::create_action_performer(std::shared_ptr<TextBuffer> buf
         case POSITION_DOWN:
         case POSITION_LEFT:
         case POSITION_RIGHT:
-            return new PositionCommand(position, buf, settings, action);
+            return new PositionCommand(state, action);
         case WRITE:
         case ERASE:
         case NEWLINE:
-            return new TextBufferCommand(buf, position, action);
+            return new TextBufferCommand(state, action);
         case QUIT:
         case SAVE:
-            return new EditorCommand(buf, action);
+            return new EditorCommand(state, action);
     }
     return nullptr;
 }

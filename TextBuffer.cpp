@@ -87,7 +87,7 @@ void TextBuffer::split_row_to_lines(int row, int col)
     }
     // Move the right end of the split to the row below
     std::string line = lines.at(row);
-    if (col == (int)line.length() - 1)
+    if (col >= (int)line.length() - 1)
     {
         lines.at(row + 1).clear();
     }

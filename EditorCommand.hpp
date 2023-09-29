@@ -4,16 +4,16 @@
 #include <memory>
 #include "Command.hpp"
 #include "InputActionType.hpp"
-#include "TextBuffer.hpp"
+#include "EditorState.hpp"
 
 class EditorCommand : public Command
 {
 public:
-    EditorCommand(std::shared_ptr<TextBuffer> buf, Input action);
+    EditorCommand(std::shared_ptr<EditorState> state, Input action);
     AfterCommandInstruction execute();
 private:
     Input action;
-    std::shared_ptr<TextBuffer> buf;
+    std::shared_ptr<EditorState> state;
 };
 
 #endif

@@ -12,6 +12,7 @@
 #include "Position.hpp"
 #include "TextBuffer.hpp"
 #include "CommandBuilder.hpp"
+#include "EditorState.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -30,6 +31,8 @@ int main(int argc, char *argv[])
     Painter painter;
     std::shared_ptr<EditorSettings> settings = std::make_shared<EditorSettings>(EditorSettings());
     std::shared_ptr<Position> position = std::make_shared<Position>(Position());
+
+    std::shared_ptr<struct EditorState> state = std::make_shared<EditorState>(EditorState(position, buf, settings));
     
     settings->enable_raw_mode();
     painter.begin_drawing();
@@ -46,7 +49,7 @@ int main(int argc, char *argv[])
     while (running)
     {
         Input action = input.read_input();
-        Command *cmd = command_builder.create_action_performer(buf, position, settings, action);
+        Command *cmd = command_builder.create_action_performer(state, action);
         painter.begin_drawing();
         switch (cmd->execute())
         {

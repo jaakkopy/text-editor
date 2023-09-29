@@ -1,9 +1,9 @@
 #include "TextBufferCommand.hpp"
+#include "PositionCommand.hpp"
 
-TextBufferCommand::TextBufferCommand(std::shared_ptr<TextBuffer> buf, std::shared_ptr<Position> pos, Input action)
+TextBufferCommand::TextBufferCommand(std::shared_ptr<EditorState> state, Input action)
 {
-    this->buf = buf;
-    this->pos = pos;
+    this->state = state;
     this->action = action;
 }
 
@@ -27,19 +27,26 @@ AfterCommandInstruction TextBufferCommand::execute()
 
 void TextBufferCommand::insert_byte()
 {
-    buf->write_byte((char)action.b, pos->get_offset_adjusted_row(), pos->get_offset_adjusted_col());
-    // TODO: update position
+    state->buffer->write_byte((char)action.b, state->position->get_offset_adjusted_row(), state->position->get_offset_adjusted_col());
+    Input task;
+    task.action_type = POSITION_RIGHT;
+    PositionCommand cmd = PositionCommand(state, task);
+    cmd.execute();
 }
 
 void TextBufferCommand::split_with_newline()
 {
-    buf->split_row_to_lines(pos->get_offset_adjusted_row(), pos->get_offset_adjusted_col());
-    // TODO: update position
+    state->buffer->split_row_to_lines(state->position->get_offset_adjusted_row(), state->position->get_offset_adjusted_col());
+    state->position->col_offset = 0;
+    state->position->col_pos= 0;
+    state->position->row_pos += 1;
 }
 
 void TextBufferCommand::erase_byte()
 {
-    //pos->col_pos -= 1;
-    buf->erase_byte(pos->get_offset_adjusted_row(), pos->get_offset_adjusted_col());
-    // TODO: update position
+    Input task;
+    task.action_type = POSITION_LEFT;
+    PositionCommand cmd = PositionCommand(state, task);
+    cmd.execute();
+    state->buffer->erase_byte(state->position->get_offset_adjusted_row(), state->position->get_offset_adjusted_col());
 }
