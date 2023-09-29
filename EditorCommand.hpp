@@ -3,6 +3,7 @@
 
 #include <memory>
 #include "Command.hpp"
+#include "InputActionType.hpp"
 #include "TextBuffer.hpp"
 
 class EditorCommand : public Command

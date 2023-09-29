@@ -1,5 +1,7 @@
 #include "CommandBuilder.hpp"
 #include "EditorCommand.hpp"
+#include "PositionCommand.hpp"
+#include "TextBufferCommand.hpp"
 
 Command *CommandBuilder::create_action_performer(std::shared_ptr<TextBuffer> buf, std::shared_ptr<Position> position, std::shared_ptr<EditorSettings> settings, Input action)
 {
@@ -9,7 +11,7 @@ Command *CommandBuilder::create_action_performer(std::shared_ptr<TextBuffer> buf
         case POSITION_DOWN:
         case POSITION_LEFT:
         case POSITION_RIGHT:
-            return new PositionUpdateCommand(position, buf, settings, action);
+            return new PositionCommand(position, buf, settings, action);
         case WRITE:
         case ERASE:
         case NEWLINE:
