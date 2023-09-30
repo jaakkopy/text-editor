@@ -65,6 +65,8 @@ AfterCommandInstruction PositionCommand::update_position_right()
 AfterCommandInstruction PositionCommand::update_position_up()
 {
     int np = state->position->row_pos - 1;
+    if (np + state->position->row_offset < 0)
+        return PASS;
     AfterCommandInstruction aci = PASS;
     if (np >= 0)
     {
@@ -82,6 +84,8 @@ AfterCommandInstruction PositionCommand::update_position_up()
 AfterCommandInstruction PositionCommand::update_position_down()
 {
     int np = state->position->row_pos + 1;
+    if (np + state->position->row_offset >= state->buffer->get_amount_rows())
+        return PASS;
     AfterCommandInstruction aci = PASS;
     if (np < state->settings->get_visible_rows())
     {
