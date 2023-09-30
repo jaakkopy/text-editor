@@ -24,6 +24,7 @@ AfterCommandInstruction TextBufferCommand::execute()
 
 AfterCommandInstruction TextBufferCommand::insert_byte()
 {
+    // TODO: special characters like tab
     state->buffer->write_byte((char)action.b, state->position->get_offset_adjusted_row(), state->position->get_offset_adjusted_col());
     Input task;
     task.action_type = POSITION_RIGHT;
