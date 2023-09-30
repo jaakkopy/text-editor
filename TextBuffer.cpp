@@ -99,3 +99,9 @@ void TextBuffer::split_row_to_lines(int row, int col)
         lines.at(row) = left_part;
     }
 }
+
+void TextBuffer::join_lines(int row1, int row2)
+{
+    lines.at(row1).append(lines.at(row2));
+    lines.erase(lines.begin() + row2);
+}

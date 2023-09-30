@@ -14,9 +14,9 @@ public:
 private:
     std::shared_ptr<EditorState> state;
     Input action;
-    void insert_byte();
-    void split_with_newline();
-    void erase_byte();
+    AfterCommandInstruction insert_byte();
+    AfterCommandInstruction split_with_newline();
+    AfterCommandInstruction erase_byte();
 };
 
 #endif
