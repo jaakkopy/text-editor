@@ -27,6 +27,9 @@ AfterCommandInstruction PositionCommand::execute()
 AfterCommandInstruction PositionCommand::update_position_left()
 {
     int np = state->position->col_pos - 1;
+    int line_len = (int)state->buffer->get_line(state->position->get_offset_adjusted_row()).length();
+    if (np >= line_len+1)
+        return PASS;
     if (np >= 0)
     {
         state->position->col_pos = np;
@@ -43,6 +46,9 @@ AfterCommandInstruction PositionCommand::update_position_left()
 AfterCommandInstruction PositionCommand::update_position_right()
 {
     int np = state->position->col_pos + 1;
+    int line_len = (int)state->buffer->get_line(state->position->get_offset_adjusted_row()).length();
+    if (np >= line_len+1)
+        return PASS;
     if (np < state->settings->get_visible_columns())
     {
         state->position->col_pos = np;

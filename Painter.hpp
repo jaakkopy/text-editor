@@ -21,6 +21,7 @@ private:
     std::vector<char> buf;
     void add_to_buf(const char *text);
     void add_to_buf(char c);
+    void draw_cursor(int row, int col);
 };
 
 #endif

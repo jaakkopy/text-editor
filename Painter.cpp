@@ -22,8 +22,13 @@ void Painter::clear_screen()
 
 void Painter::draw_cursor(const std::shared_ptr<Position> position)
 {
+    draw_cursor(position->row_pos, position->col_pos);
+}
+
+void Painter::draw_cursor(int row, int col)
+{
     char b[32];
-    snprintf(b, sizeof(b), "\x1b[%d;%dH", position->row_pos + 1, position->col_pos + 1);
+    snprintf(b, sizeof(b), "\x1b[%d;%dH", row + 1, col + 1);
     add_to_buf(b);
 }
 
@@ -52,7 +57,7 @@ void Painter::draw_text_buffer(const std::shared_ptr<EditorState> state)
 
 void Painter::draw_line(const std::shared_ptr<EditorState> state)
 {
-    draw_cursor(state->position);
+    draw_cursor(state->position->row_pos, 0);
     add_to_buf("\x1b[K");
     auto line = state->buffer->get_line(state->position->get_offset_adjusted_row());
     int line_length = (int)line.length();
