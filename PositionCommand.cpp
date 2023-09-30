@@ -59,31 +59,53 @@ AfterCommandInstruction PositionCommand::update_position_right()
 AfterCommandInstruction PositionCommand::update_position_up()
 {
     int np = state->position->row_pos - 1;
+    AfterCommandInstruction aci = PASS;
     if (np >= 0)
     {
         state->position->row_pos = np;
-        return PASS;
     }
-    if (state->position->row_offset > 0)
+    else if (state->position->row_offset > 0)
     {
         state->position->row_offset -= 1;
-        return DRAW_BUF;
+        aci = DRAW_BUF;
     }
-    return PASS;
+    update_column_after_row_switch(aci);
+    return aci;
 }
 
 AfterCommandInstruction PositionCommand::update_position_down()
 {
     int np = state->position->row_pos + 1;
+    AfterCommandInstruction aci = PASS;
     if (np < state->settings->get_visible_rows())
     {
         state->position->row_pos = np;
-        return PASS;
     }
-    if (state->position->row_offset < state->buffer->get_amount_rows() - state->settings->get_visible_rows() - 1)
+    else if (state->position->row_offset < state->buffer->get_amount_rows() - state->settings->get_visible_rows() - 1)
     {
         state->position->row_offset += 1;
-        return DRAW_BUF;
+        aci = DRAW_BUF;
     }
-    return PASS;
+    update_column_after_row_switch(aci);
+    return aci;
+}
+
+void PositionCommand::update_column_after_row_switch(AfterCommandInstruction &aci)
+{
+    int c = state->position->col_pos;
+    int co = state->position->col_offset;
+    int line_len = (int)state->buffer->get_line(state->position->get_offset_adjusted_row()).length();
+    // update the column position to the end of the new row
+    if (c + co >= line_len)
+    {
+        c = line_len - co;
+        if (c < 0)
+        {
+            aci = DRAW_BUF;
+            co += c;
+            c = 0;
+        }
+        state->position->col_pos = c;
+        state->position->col_offset = co;
+    }
 }

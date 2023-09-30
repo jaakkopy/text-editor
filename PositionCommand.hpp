@@ -19,6 +19,7 @@ private:
     AfterCommandInstruction update_position_right();
     AfterCommandInstruction update_position_up();
     AfterCommandInstruction update_position_down();
+    void update_column_after_row_switch(AfterCommandInstruction &aci);
 };
 
 
