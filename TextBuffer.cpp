@@ -76,7 +76,11 @@ void TextBuffer::write_file()
 
 void TextBuffer::split_row_to_lines(int row, int col)
 {
-    lines.push_back(std::string());
+    // If the very first character inserted to the buffer is '\n', the first and second lines need to be added at once. Otherwise, just one line is enough
+    if (lines.size() == 0)
+        lines.insert(lines.end(), {std::string(), std::string()});
+    else
+        lines.push_back(std::string());
     int end = (int)lines.size() - 1;
     if (end == 0)
         return;
