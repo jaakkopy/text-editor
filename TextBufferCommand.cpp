@@ -17,6 +17,8 @@ AfterCommandInstruction TextBufferCommand::execute()
         return erase_byte();
     case NEWLINE:
         return split_with_newline();
+    case TAB:
+        return insert_tab();
     default:
         return PASS;
     }
@@ -33,6 +35,15 @@ AfterCommandInstruction TextBufferCommand::insert_byte()
     return DRAW_LINE;
 }
 
+AfterCommandInstruction TextBufferCommand::insert_tab()
+{
+    // Tab is interpreted as 4 spaces
+    action.b = ' ';
+    for (int i = 0; i < 4; ++i)
+        insert_byte();
+    return DRAW_LINE; 
+}
+
 AfterCommandInstruction TextBufferCommand::split_with_newline()
 {
     state->buffer->split_row_to_lines(state->position->get_offset_adjusted_row(), state->position->get_offset_adjusted_col());
@@ -44,13 +55,17 @@ AfterCommandInstruction TextBufferCommand::split_with_newline()
 
 AfterCommandInstruction TextBufferCommand::erase_byte()
 {
-    if (state->position->col_pos > 0)
+    if (state->position->get_offset_adjusted_col() > 0)
     {
+        int original_col = state->position->col_pos;
         Input task;
         task.action_type = POSITION_LEFT;
         PositionCommand cmd = PositionCommand(state, task);
         cmd.execute();
         state->buffer->erase_byte(state->position->get_offset_adjusted_row(), state->position->get_offset_adjusted_col());
+        // orignal column was 0 but the offset adjusted colum was greater than 0, so the offset was updated
+        if (original_col == 0)
+            return DRAW_BUF;
     }
     else if (state->position->get_offset_adjusted_row() > 0)
     {

@@ -32,6 +32,9 @@ Input InputReader::read_input()
         case '\r':
             inp.action_type = NEWLINE;
             break;
+        case '\t':
+            inp.action_type = TAB;
+            break;
         case CTRL_KEY('q'):
             inp.action_type = QUIT;
             break;

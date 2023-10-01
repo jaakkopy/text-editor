@@ -3,9 +3,10 @@
 
 enum InputActionType
 {
-    WRITE,
+    WRITE = 1000,
     ERASE,
     NEWLINE,
+    TAB,
     POSITION_UP,
     POSITION_DOWN,
     POSITION_LEFT,

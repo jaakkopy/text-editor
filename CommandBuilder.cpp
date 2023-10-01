@@ -15,6 +15,7 @@ Command *CommandBuilder::create_action_performer(std::shared_ptr<EditorState> st
         case WRITE:
         case ERASE:
         case NEWLINE:
+        case TAB:
             return new TextBufferCommand(state, action);
         case QUIT:
         case SAVE:

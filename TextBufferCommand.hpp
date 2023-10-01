@@ -15,6 +15,7 @@ private:
     std::shared_ptr<EditorState> state;
     Input action;
     AfterCommandInstruction insert_byte();
+    AfterCommandInstruction insert_tab();
     AfterCommandInstruction split_with_newline();
     AfterCommandInstruction erase_byte();
 };
