@@ -97,8 +97,8 @@ void TextBuffer::split_row_to_lines(int row, int col)
     }
     else
     {
-        auto left_part = line.substr(0, (size_t)col);
-        auto right_part = lines.at(row).substr(col);
+        std::string left_part = line.substr(0, (size_t)col);
+        std::string right_part = lines.at(row).substr(col);
         lines.at(row + 1) = right_part;
         lines.at(row) = left_part;
     }

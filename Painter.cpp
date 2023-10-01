@@ -47,7 +47,6 @@ void Painter::draw_text_buffer(const std::shared_ptr<EditorState> state)
         {
             add_to_buf((*it).substr(state->position->col_offset, state->settings->get_visible_columns()).c_str());
         }
-
         if (visible_rows > 1)
             add_to_buf("\r\n");
         ++it;

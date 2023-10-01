@@ -16,16 +16,13 @@
 
 int main(int argc, char *argv[])
 {
-    std::shared_ptr<struct EditorState> state = std::make_shared<EditorState>();
-    if (argc > 1)
-    {
-        state->buffer->read_file(argv[1]);
-    }
-    else
+    if (argc < 2)
     {
         fprintf(stderr, "Please provide a file to open or create\n");
         return 1;
     }
+    std::shared_ptr<struct EditorState> state = std::make_shared<EditorState>();
+    state->buffer->read_file(argv[1]);
     InputReader input;
     CommandBuilder command_builder;
     Painter painter;
